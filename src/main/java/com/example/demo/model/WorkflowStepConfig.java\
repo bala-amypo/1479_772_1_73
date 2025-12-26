@@ -1,0 +1,17 @@
+package com.example.demo.model;
+
+import javax.persistence.*;
+
+@Entity
+public class WorkflowStepConfig {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private Long templateId;
+    private Integer levelNumber;
+    private String approverRole;
+    private Boolean isFinalStep;
+    private String instructions;
+}
