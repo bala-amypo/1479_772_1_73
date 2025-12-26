@@ -3,8 +3,8 @@ package com.example.demo.util;
 import com.example.demo.model.ApprovalAction;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
-import javax.persistence.criteria.*;
+import javkarta.persistence.*;
+import javkarta.persistence.criteria.*;
 import java.util.List;
 
 @Component
