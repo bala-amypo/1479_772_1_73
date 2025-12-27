@@ -1,26 +1,32 @@
 package com.example.demo.util;
 
 import com.example.demo.model.ApprovalAction;
+import com.example.demo.repository.ApprovalActionRepository;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javkarta.persistence.*;
-import javkarta.persistence.criteria.*;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @Component
+@Transactional
 public class HibernateQueryUtil {
-
-    @PersistenceContext
-    private EntityManager em;
-
+    
+    @Autowired
+    private EntityManager entityManager;
+    
     public List<ApprovalAction> findActionsByApproverUsingCriteria(Long approverId) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<ApprovalAction> cq = cb.createQuery(ApprovalAction.class);
-        Root<ApprovalAction> root = cq.from(ApprovalAction.class);
-
-        cq.select(root)
-          .where(cb.equal(root.get("approverId"), approverId));
-
-        return em.createQuery(cq).getResultList();
+        if (approverId == null) {
+            return List.of();
+        }
+        
+        Session session = entityManager.unwrap(Session.class);
+        Query<ApprovalAction> query = session.createQuery(
+            "FROM ApprovalAction a WHERE a.approverId = :approverId", 
+            ApprovalAction.class);
+        query.setParameter("approverId", approverId);
+        return query.getResultList();
     }
 }
